@@ -1,0 +1,113 @@
+CREATE TABLE Client (
+    cin_client varchar(10) PRIMARY KEY,
+    nom_client VARCHAR(30),
+    prenom_client VARCHAR(30),
+    tel_client VARCHAR(10),
+    email_client VARCHAR(255)
+);
+CREATE TABLE Appartement (
+	id_app INTEGER PRIMARY KEY,
+    surface INT,
+    nbre_piece INT,
+    gouvernorat varchar(20),
+    num INT,
+    rue VARCHAR(255),
+    code_postal INT,
+    prix DECIMAL(6, 2),
+    meublé CHAR(1),     --le type boolean n'est pas pris en charge et donc Y ou N 
+    type_location VARCHAR(20),
+    nbr_per INTEGER,
+    nbre_personne_max INT,
+    penalite DECIMAL(6,2),
+    etat VARCHAR(20),
+    disponibilite CHAR(1),    --le type boolean n'est pas pris en charge et donc Y ou N 
+    cin_propri 	varchar(10),
+    
+    constraint fk_Propri foreign key (cin_propri) references Client (cin_client)
+);
+
+CREATE TABLE Location (
+	id_location INTEGER PRIMARY KEY,
+    id_app INTEGER,
+    cin_loc varchar(10),
+    cin_pro varchar(10),
+    nb_per INT,
+    datedebut Date,
+    datefin Date ,
+    datesortie Date default null,
+    constraint fk_Appartement foreign key (id_app) references Appartement (id_app),
+    constraint fk_Client foreign key (cin_loc) references Client (cin_Client),
+    constraint fk_Proprietaire foreign key (cin_pro) references Client (cin_client),
+	constraint check_id_different check (cin_loc <> cin_pro)
+);
+INSERT INTO Client (cin_client, nom_client, prenom_client, tel_client, email_client) 
+VALUES ('01234567', 'Ben Ali', 'Mohamed', '21612345', 'mohamed.benali@example.com');
+
+INSERT INTO Client (cin_client, nom_client, prenom_client, tel_client, email_client) 
+VALUES ('12345678', 'Cherif', 'Fatma', '21623456', 'fatma.cherif@example.com');
+
+INSERT INTO Client (cin_client, nom_client, prenom_client, tel_client, email_client) 
+VALUES ('00456789', 'Haddad', 'Nadia', '21634567', 'nadia.haddad@example.com');
+
+INSERT INTO Appartement (id_app,surface, nbre_piece, gouvernorat, num, rue, code_postal, prix, meublé, type_location, nbr_per,nbre_personne_max, penalite, etat, disponibilite, cin_propri) VALUES
+    (1,100, 3, 'Tunis', 12, 'Rue de Tunis', 1000, 1500.00, 'N', 'par mois', 0,6, 200.00, 'occupé', 'N', '01234567');
+INSERT INTO Appartement (id_app,surface, nbre_piece, gouvernorat, num, rue, code_postal, prix, meublé, type_location, nbr_per,nbre_personne_max, penalite, etat, disponibilite, cin_propri) VALUES
+    (2,80, 2, 'Tunis', 5, 'Avenue Habib Bourguiba', 2000, 1200.00, 'Y', 'par nuitée', 3,5, 500.00, 'occupé', 'N', '12345678');
+INSERT INTO Appartement (id_app,surface, nbre_piece, gouvernorat, num, rue, code_postal, prix, meublé, type_location, nbr_per,nbre_personne_max, penalite, etat, disponibilite, cin_propri) VALUES
+    (3,120, 4, 'Sousse', 18, 'Avenue Mohamed V', 3000, 1800.00, 'N', 'par mois', 0,6, 300.00, 'libre', 'Y', '00456789');
+INSERT INTO Appartement (id_app,surface, nbre_piece, gouvernorat, num, rue, code_postal, prix, meublé, type_location, nbr_per,nbre_personne_max, penalite, etat, disponibilite, cin_propri) VALUES
+    (4,120, 4, 'Tunis', 12, 'Avenue Mohamed V', 3000, 1800.00, 'Y', 'par mois', 4,6, 300.00, 'occupé', 'N', '00456789');
+
+
+INSERT INTO Location (id_location, id_app, cin_loc, cin_pro, nb_per, datedebut, datefin, datesortie) 
+VALUES (1, 1, '01234567', '00456789', 4, TO_DATE('2024-04-10', 'YYYY-MM-DD'), TO_DATE('2024-04-22', 'YYYY-MM-DD'), TO_DATE('2024-04-22', 'YYYY-MM-DD'));
+
+INSERT INTO Location (id_location, id_app, cin_loc, cin_pro, nb_per, datedebut, datefin, datesortie) 
+VALUES (2, 1, '01234567', '00456789', 3, TO_DATE('2022-04-25', 'YYYY-MM-DD'), TO_DATE('2022-09-25', 'YYYY-MM-DD'), TO_DATE('2022-09-25', 'YYYY-MM-DD'));
+
+INSERT INTO Location (id_location, id_app, cin_loc, cin_pro, nb_per, datedebut, datefin, datesortie) 
+VALUES (3, 2, '12345678', '01234567', 4, TO_DATE('2024-05-01', 'YYYY-MM-DD'), TO_DATE('2024-05-08', 'YYYY-MM-DD'), NULL);
+
+INSERT INTO Location (id_location, id_app, cin_loc, cin_pro, nb_per, datedebut, datefin, datesortie) 
+VALUES (4, 1, '01234567', '00456789', 4, TO_DATE('2021-06-15', 'YYYY-MM-DD'), TO_DATE('2021-10-15', 'YYYY-MM-DD'), TO_DATE('2021-10-16', 'YYYY-MM-DD'));
+
+INSERT INTO Location (id_location, id_app, cin_loc, cin_pro, nb_per, datedebut, datefin, datesortie) 
+VALUES (5, 1, '01234567', '00456789', 3, TO_DATE('2023-07-01', 'YYYY-MM-DD'), TO_DATE('2024-08-01', 'YYYY-MM-DD'), NULL);
+
+INSERT INTO Location (id_location, id_app, cin_loc, cin_pro, nb_per, datedebut, datefin, datesortie) 
+VALUES (6, 2, '00456789', '01234567', 2, TO_DATE('2024-08-15', 'YYYY-MM-DD'), TO_DATE('2024-09-15', 'YYYY-MM-DD'), NULL);
+INSERT INTO Location (id_location, id_app, cin_loc, cin_pro, nb_per, datedebut, datefin, datesortie) 
+VALUES (7, 3, '01234567', '00456789', 2, TO_DATE('2024-05-06', 'YYYY-MM-DD'), TO_DATE('2025-05-06', 'YYYY-MM-DD'), NULL);
+INSERT INTO Location (id_location, id_app, cin_loc, cin_pro, nb_per, datedebut, datefin, datesortie) 
+VALUES (8, 4, '12345678', '00456789', 4, TO_DATE('2024-05-01', 'YYYY-MM-DD'), TO_DATE('2024-05-06', 'YYYY-MM-DD'), NULL);
+
+
+CREATE OR REPLACE TRIGGER check_nb_per_trigger
+BEFORE INSERT OR UPDATE ON Location
+FOR EACH ROW
+DECLARE
+    v_nbre_personne_max INT;
+BEGIN
+    SELECT nbre_personne_max INTO v_nbre_personne_max FROM Appartement WHERE id_app = :NEW.id_app;
+    IF :NEW.nb_per >= v_nbre_personne_max THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Le nombre de personnes dépasse le maximum autorisé.');
+    END IF;
+END;
+
+CREATE OR REPLACE PROCEDURE miseajourapp AS
+    v_dateActuelle DATE;
+BEGIN
+    -- Obtenir la date actuelle en PL/SQL
+    v_dateActuelle := SYSDATE;
+    
+    -- Mettre à jour les appartements debut location
+    UPDATE Appartement a
+    SET etat = 'occupé', disponibilite = 'N',nbr_per=(SELECT nb_per from Location l where l.id_app=a.id_app)
+    WHERE id_app IN (SELECT id_app FROM Location WHERE TO_CHAR(datedebut, 'DD-MM-YYYY') = TO_CHAR(v_dateActuelle, 'DD-MM-YYYY'));
+	-- Mettre à jour les appartements fin location
+    UPDATE Appartement a
+    SET etat = 'libre', disponibilite = 'Y',nbr_per=0
+    WHERE id_app IN (SELECT id_app FROM Location WHERE TO_CHAR(datefin, 'DD-MM-YYYY') = TO_CHAR(v_dateActuelle, 'DD-MM-YYYY'));
+END miseajourapp;
+
+Execute miseajourapp;
